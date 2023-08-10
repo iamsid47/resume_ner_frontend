@@ -3,7 +3,9 @@ import axios from "axios";
 
 const FileHandle = () => {
   const [selectedFiles, setSelectedFiles] = useState([]);
-  const [jobDescription, setJobDescription] = useState("");
+  const [selectedJobDescriptionFile, setSelectedJobDescriptionFile] =
+    useState(null);
+
   const [uploadStatus, setUploadStatus] = useState("");
   const [rankedCvs, setRankedCvs] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -12,8 +14,8 @@ const FileHandle = () => {
     setSelectedFiles(Array.from(event.target.files));
   };
 
-  const handleJobDescriptionChange = (event) => {
-    setJobDescription(event.target.value);
+  const handleJobDescriptionFileChange = (event) => {
+    setSelectedJobDescriptionFile(event.target.files[0]);
   };
 
   const handleUpload = async () => {
@@ -23,7 +25,10 @@ const FileHandle = () => {
         formData.append("files", file);
       });
 
-      formData.append("jobDescription", jobDescription);
+      // Append job description file
+      if (selectedJobDescriptionFile) {
+        formData.append("jobDescriptionFile", selectedJobDescriptionFile);
+      }
 
       setUploadStatus("Uploading...");
 
@@ -63,14 +68,20 @@ const FileHandle = () => {
             />
           </div>
 
-          <textarea
+          {/* <textarea
             rows="10"
             className="block p-4 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Enter job description here..."
             value={jobDescription}
             onChange={handleJobDescriptionChange}
-          ></textarea>
-
+          ></textarea> */}
+          <div className="flex flex-col mb-6 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
+            <input
+              type="file"
+              onChange={handleJobDescriptionFileChange}
+              className="text-gray-500 cursor-pointer inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center rounded-lg bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-900 transition duration-300"
+            />
+          </div>
           <button
             onClick={handleUpload}
             className="inline-flex my-6 justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900 transition duration-300"
