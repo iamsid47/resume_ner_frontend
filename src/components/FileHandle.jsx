@@ -108,7 +108,7 @@ const FileHandle = () => {
             onClick={handleUpload}
             className="inline-flex my-6 justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4  focus:ring-blue-900 transition duration-300"
           >
-            Upload
+            Process &rarr;
           </button>
           {uploadStatus && <p className="text-white">{uploadStatus}</p>}
         </div>
