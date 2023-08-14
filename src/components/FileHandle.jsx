@@ -5,7 +5,6 @@ const FileHandle = () => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [selectedJobDescriptionFile, setSelectedJobDescriptionFile] =
     useState(null);
-
   const [uploadStatus, setUploadStatus] = useState("");
   const [rankedCvs, setRankedCvs] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -22,26 +21,28 @@ const FileHandle = () => {
     try {
       const formData = new FormData();
       selectedFiles.forEach((file) => {
-        formData.append("files", file);
+        formData.append("resume_files", file);
       });
 
       // Append job description file
       if (selectedJobDescriptionFile) {
-        formData.append("jobDescriptionFile", selectedJobDescriptionFile);
+        formData.append("job_description", selectedJobDescriptionFile);
       }
 
       setUploadStatus("Uploading...");
 
       const response = await axios.post(
-        "http://localhost:5000/process_cvs",
+        "http://localhost:5000/process_data",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
 
+      console.log("Response from server:", response.data);
+
       setUploadStatus("Upload Complete");
-      setRankedCvs(response.data.ranked_cvs);
+      setRankedCvs(response.data.result);
     } catch (error) {
       console.error("Error uploading files:", error);
       setUploadStatus("Upload Failed");
@@ -135,14 +136,19 @@ const FileHandle = () => {
           <tbody>
             {rankedCvs.map((cv, index) => (
               <tr key={index} className="text-white">
-                <td class="border border-gray-700 py-2 px-4">{cv.file_name}</td>
+                <td class="border border-gray-700 py-2 px-4">
+                  {cv.resume_filename}
+                </td>
                 <td class="border border-gray-700 py-4 px-16 text-center">
                   {cv.rank}
                 </td>
 
                 <td class="border border-gray-700 py-4 px-16 text-center">
-                  {cv.score.toFixed(2)}%
+                  {cv.ensemble_score
+                    ? `${cv.ensemble_score.toFixed(2)}%`
+                    : "N/A"}
                 </td>
+                {/* 
                 <td class="border border-gray-700 py-4 px-16">
                   <button
                     onClick={() => setShowDropdown(!showDropdown)}
@@ -157,7 +163,7 @@ const FileHandle = () => {
                       ))}
                     </ul>
                   )}
-                </td>
+                </td> */}
               </tr>
             ))}
           </tbody>
