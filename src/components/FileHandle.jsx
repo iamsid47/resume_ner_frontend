@@ -148,7 +148,7 @@ const FileHandle = () => {
                     ? `${cv.ensemble_score.toFixed(2)}%`
                     : "N/A"}
                 </td>
-                {/* 
+
                 <td class="border border-gray-700 py-4 px-16">
                   <button
                     onClick={() => setShowDropdown(!showDropdown)}
@@ -159,11 +159,11 @@ const FileHandle = () => {
                   {showDropdown && (
                     <ul class="list-disc list-inside">
                       {cv.ner_output.map((item, itemIndex) => (
-                        <li key={itemIndex}>{`${item[0]}`}</li>
+                        <li key={itemIndex}>{`${item["text"]}`}</li>
                       ))}
                     </ul>
                   )}
-                </td> */}
+                </td>
               </tr>
             ))}
           </tbody>
